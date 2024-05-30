@@ -14,17 +14,37 @@ public class ErrorHandling {
                 })
                 //.onErrorReturn(-1)
                 .onErrorReturn(ArithmeticException.class, -1)
-                .onErrorReturn(RuntimeException.class, -2)
+               // .onErrorReturn(RuntimeException.class, -2)
                 .subscribe(System.out::println);
 
-        /*Flux.range(1, 5)
+        Flux.range(1, 5)
                 .map(num -> {
                     if (num == 3){
                         num = num/0;
                     }
                     return num;
                 })
-                .onErrorResume()
-                .subscribe(System.out::println);*/
+                .onErrorResume(error -> Flux.just(-1))
+                .subscribe(System.out::println);
+
+        Flux.range(1, 5)
+                .map(num -> {
+                    if (num == 3){
+                        num = num/0;
+                    }
+                    return num;
+                })
+                .onErrorComplete()
+                .subscribe(System.out::println);
+
+        Flux.range(1, 5)
+                .map(num -> {
+                    if (num == 3){
+                        num = num/0;
+                    }
+                    return num;
+                })
+                .onErrorContinue((err, _) -> err.getMessage())
+                .subscribe(System.out::println);
     }
 }
