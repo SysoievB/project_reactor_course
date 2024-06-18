@@ -1,6 +1,7 @@
 package com.sec5operators;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public class ErrorHandling {
 
@@ -45,6 +46,12 @@ public class ErrorHandling {
                     return num;
                 })
                 .onErrorContinue((err, _) -> err.getMessage())
+                .subscribe(System.out::println);
+
+
+        Mono.just(5)
+                .map(num -> num/0)
+                .onErrorMap(ArithmeticException.class,_ -> new RuntimeException("Dividing by zero not allowed"))
                 .subscribe(System.out::println);
     }
 }
